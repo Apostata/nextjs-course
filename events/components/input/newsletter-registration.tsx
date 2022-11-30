@@ -1,12 +1,17 @@
 import classes from './newsletter-registration.module.css';
+import{postNewsletterUserAddMutation} from '../../helpers/fetch-utils'
+import { FormEvent, useCallback, useRef } from 'react';
+const NewsletterRegistration = () => {
+  const emailRef = useRef<HTMLInputElement>()
 
-function NewsletterRegistration() {
-  function registrationHandler(event) {
+  const onSuccess = useCallback((data:any)=>{
+    console.log(data?.data)
+  },[])
+
+  const {signUp, isSuccess, data} = postNewsletterUserAddMutation(onSuccess)
+  const registrationHandler = (event:FormEvent) => {
     event.preventDefault();
-
-    // fetch user input (state or refs)
-    // optional: validate input
-    // send valid data to API
+    signUp(emailRef.current.value)
   }
 
   return (
@@ -15,6 +20,7 @@ function NewsletterRegistration() {
       <form onSubmit={registrationHandler}>
         <div className={classes.control}>
           <input
+            ref={emailRef}
             type='email'
             id='email'
             placeholder='Your email'

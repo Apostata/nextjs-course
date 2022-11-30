@@ -1,7 +1,7 @@
 import { Fragment, PropsWithChildren } from 'react';
 import Head from 'next/head';
 
-import { getEventById, getFeaturedEvents } from '../../helpers/api-util';
+import { getEventById, getFeaturedEvents } from '../../helpers/fetch-utils';
 import EventSummary from '../../components/event-detail/event-summary';
 import EventLogistics from '../../components/event-detail/event-logistics';
 import EventContent from '../../components/event-detail/event-content';
@@ -9,12 +9,15 @@ import EventContent from '../../components/event-detail/event-content';
 import Comments from '../../components/input/comments';
 import { IEvent } from '../../models/events_models';
 import { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 
 interface Props extends PropsWithChildren{
   selectedEvent: IEvent
 }
 
 function EventDetailPage(props: Props) {
+  const router = useRouter();
+  const eventId = router.query.eventId as string;
   const event = props.selectedEvent;
 
   if (!event) {
@@ -44,7 +47,7 @@ function EventDetailPage(props: Props) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
-      <Comments eventId={event.id} />
+      <Comments eventId={eventId} />
     </Fragment>
   );
 }

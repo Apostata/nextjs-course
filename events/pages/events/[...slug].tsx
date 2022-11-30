@@ -1,6 +1,6 @@
 import { Fragment, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getAllEventsWithReactQuery } from '../../helpers/api-util';
+import { getAllEventsWithReactQuery } from '../../helpers/fetch-utils';
 import EventList from '../../components/events/event-list';
 import ResultsTitle from '../../components/events/results-title';
 import Button from '../../components/ui/button';

@@ -3,7 +3,11 @@ import { CommentEntity, IComment } from '../../models/coment_model';
 import classes from './new-comment.module.css';
 
 interface Props extends PropsWithChildren{
-  onAddComment: (comment:CommentEntity) => void
+  onAddComment: (comment:{ 
+    email: string;
+    name: string;
+    text: string;
+  }) => void,
 }
 
 const NewComment = (props: Props) => {
@@ -38,10 +42,13 @@ const NewComment = (props: Props) => {
       name: enteredName,
       text: enteredComment,
     });
+    emailInputRef.current.value ='';
+    nameInputRef.current.value='';
+    commentInputRef.current.value='';
   }
 
   return (
-    <form className={classes.form}>
+    <form className={classes.form} onSubmit={sendCommentHandler}>
       <div className={classes.row}>
         <div className={classes.control}>
           <label htmlFor='email'>Your email</label>

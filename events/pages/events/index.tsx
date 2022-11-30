@@ -1,11 +1,11 @@
 import { Fragment, PropsWithChildren } from 'react';
 import { useRouter } from 'next/router';
 
-import { getAllEvents } from '../../helpers/api-util';
+import { getAllEvents } from '../../helpers/fetch-utils';
 import EventList from '../../components/events/event-list';
 import EventsSearch from '../../components/events/events-search';
 import { Event } from '../../models/events_models';
-import{ getAllEventsWithReactQuery} from '../../helpers/api-util'
+// import{ getAllEventsWithReactQuery} from '../../helpers/fetch-utils'
 import Head from 'next/head';
 
 interface Props extends PropsWithChildren{
@@ -16,7 +16,7 @@ function AllEventsPage(props:Props) {
   const router = useRouter();
   const { events } = props;
 
-  function findEventsHandler(year, month) {
+  function findEventsHandler(year:number, month:number) {
     const fullPath = `/events/${year}/${month}`;
 
     router.push(fullPath);

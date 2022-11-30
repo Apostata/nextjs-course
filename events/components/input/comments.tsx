@@ -1,8 +1,9 @@
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useCallback, useState } from 'react';
 
 import CommentList from './comment-list';
 import NewComment from './new-comment';
 import classes from './comments.module.css';
+import { getAllCommentsByEventIdsWithReactQuery, postEventCommentAddMutation } from '../../helpers/fetch-utils';
 
 interface Props  extends PropsWithChildren{
   eventId: string
@@ -10,15 +11,18 @@ interface Props  extends PropsWithChildren{
 
 const Comments = (props: Props) => {
   const { eventId } = props;
-
   const [showComments, setShowComments] = useState(false);
+
+  const {postComment, error, isSuccess, isLoading, data,} = postEventCommentAddMutation()
 
   function toggleCommentsHandler() {
     setShowComments((prevStatus) => !prevStatus);
   }
 
   function addCommentHandler(commentData) {
-    // send data to API
+    commentData = {...commentData, eventId}
+    postComment(commentData)
+   
   }
 
   return (
@@ -26,8 +30,8 @@ const Comments = (props: Props) => {
       <button onClick={toggleCommentsHandler}>
         {showComments ? 'Hide' : 'Show'} Comments
       </button>
-      {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && <CommentList />}
+      {showComments && <NewComment onAddComment={(commentData)=>addCommentHandler(commentData)}/>}
+      {showComments && <CommentList eventId={eventId} hasNewComments={!isLoading}/>}
     </section>
   );
 }
