@@ -20,7 +20,7 @@ export  const getAllEvents= async () =>{
 
 export  const getAllCommentsByEventId= async (id:string) =>{
 	try{
-	  const response = await fetch(`/api/comments/event/${id}`);
+	  const response = await fetch(`/api/events/${id}/comments`);
 	  const res = await response.json();
 	  return res
 	} catch(e){

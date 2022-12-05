@@ -1,4 +1,5 @@
 import { FormEvent, PropsWithChildren, useRef, useState } from 'react';
+import { emailIsValid, required } from '../../helpers/validation_utils';
 import { CommentEntity, IComment } from '../../models/coment_model';
 import classes from './new-comment.module.css';
 
@@ -24,14 +25,15 @@ const NewComment = (props: Props) => {
     const enteredName = nameInputRef.current.value;
     const enteredComment = commentInputRef.current.value;
 
+
+    const isValidEmail = emailIsValid(enteredEmail)
+    const isValidName = required(enteredName)
+    const isValidComment = required(enteredName)
+
+    console.log(isValidEmail, isValidName, isValidComment)
+    
     if (
-      !enteredEmail ||
-      enteredEmail.trim() === '' ||
-      !enteredEmail.includes('@') ||
-      !enteredName ||
-      enteredName.trim() === '' ||
-      !enteredComment ||
-      enteredComment.trim() === ''
+      !isValidEmail || !isValidName || !isValidComment
     ) {
       setIsInvalid(true);
       return;

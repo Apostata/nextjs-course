@@ -5,9 +5,9 @@ const CommentList =({eventId, hasNewComments}:{eventId:string, hasNewComments:bo
   
   const {data, error, isLoading} = getAllCommentsByEventIdsWithReactQuery(eventId, hasNewComments)
   const comments = data
-  console.log(eventId, comments)
   return (
-    <>{comments?.length? <ul className={classes.comments}>
+    <>
+    {comments?.length > 0? <ul className={classes.comments}>
       {comments.map(comment=><li key={comment.id}>
           <p>{comment.text}</p>
           <div>
