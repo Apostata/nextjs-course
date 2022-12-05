@@ -80,9 +80,13 @@ const postNewsletterSignUp = async (email:string) =>{
 			}
 		})
 		const data = await response.json()
-	  	return data
+		if(response.ok){
+	  		return data
+		}
+		throw new Error(data.message)
+		
 	} catch(e){
-		return new Error('Error on signup to newsletter')
+		throw new Error(e.message)
 	}
 }
 
@@ -97,9 +101,13 @@ const postEventComment = async (comment:IComment) =>{
 			}
 		})
 		const data = await response.json()
-	  	return data
+		if(response.ok){
+	  		return data
+		}
+		throw new Error(data.message)
+		
 	} catch(e){
-		return new Error('Error on add comment')
+		throw new Error(e.message)
 	}
 }
 
@@ -129,12 +137,16 @@ export const getAllCommentsByEventIdsWithReactQuery =  (eventId:string, enabled:
 	return {data, error, isLoading}
 }
 
-export const postNewsletterUserAddMutation = (onSuccessCallback?:(data: any, variables: string, context: unknown) => void | Promise<unknown>) =>{
-	const {mutate:signUp, error, isSuccess, data:res} = useMutation(postNewsletterSignUp, {onSuccess: onSuccessCallback})
+export type SuccessCallback = (data: any, variables: string | IComment, context: unknown) => void | Promise<unknown>
+export type ErrorCallback = (data: any, variables: string | IComment, context: unknown) => void | Promise<unknown>
+
+
+export const postNewsletterUserAddMutation = (onSuccessCallback?:SuccessCallback, onErrorCallback?:ErrorCallback) =>{
+	const {mutate:signUp, error, isSuccess, data:res} = useMutation(postNewsletterSignUp, {onError:onErrorCallback, onSuccess: onSuccessCallback })
 	return {signUp, error, isSuccess, data:res?.data}
 }
 
-export const postEventCommentAddMutation = (onSuccessCallback?:(data: any, variables: IComment, context: unknown) => void | Promise<unknown>) =>{
-	const {mutate:postComment, error, isSuccess, isLoading, data:res} = useMutation(postEventComment, {onSuccess: onSuccessCallback})
+export const postEventCommentAddMutation = (onSuccessCallback?:SuccessCallback,  onErrorCallback?:ErrorCallback) =>{
+	const {mutate:postComment, error, isSuccess, isLoading, data:res} = useMutation(postEventComment, {onError:onErrorCallback, onSuccess: onSuccessCallback})
 	return {postComment, error, isSuccess, isLoading, data:res?.data}
 }

@@ -1,16 +1,25 @@
 import classes from './newsletter-registration.module.css';
 import{postNewsletterUserAddMutation} from '../../helpers/fetch-utils'
 import { FormEvent, useCallback, useRef } from 'react';
+import { useNotificationContext } from '../../store/notification_context';
+
 const NewsletterRegistration = () => {
+  const {showNotification} = useNotificationContext()
+
   const emailRef = useRef<HTMLInputElement>()
 
-  const onSuccess = useCallback((data:any)=>{
-    console.log(data?.data)
-  },[])
+  const onError = useCallback((e:Error)=>{
+    showNotification({title:'SignUp', status:'error', message:e.message})
+  },[showNotification])
 
-  const {signUp, isSuccess, data} = postNewsletterUserAddMutation(onSuccess)
+  const onSuccess = useCallback(()=>{
+    showNotification({title:'SignUp', status:'success', message:`${emailRef.current.value} as registered succesfuly!`})
+  },[showNotification])
+
+  const {signUp, isSuccess, data} = postNewsletterUserAddMutation(onSuccess, onError)
   const registrationHandler = (event:FormEvent) => {
     event.preventDefault();
+    showNotification({title:'SignUp', status:'pending', message:`registering ${emailRef.current.value} ...`})
     signUp(emailRef.current.value)
   }
 

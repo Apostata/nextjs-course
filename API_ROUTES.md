@@ -119,3 +119,25 @@ export default FeedbackPage
 ```
 
 ## Dynamic API routes
+Seguindo o padrão de rotas definidos pelo framework, podemos usar ma mesma lógica visto que as rotas ficam na pasta `/pages/api/`
+```ts
+...
+const getDbCommentsById =async (req: NextApiRequest, res: NextApiResponse) =>{
+	const {id} = req.query
+	const resDb = await readOneFromDb('comments', {_id: new ObjectId(id as string)})
+	if(!(resDb instanceof Error)){
+		const data = await readOneFromDb('comments', {_id: new ObjectId(id as string)})
+		return res.status(200).json({data:data})
+	}
+	return res.status(500).json({message:resDb})
+}	
+
+const handler: NextApiHandler = (req, res)=>{
+	const methods = {
+	   GET:() => getDbCommentsById(req, res),
+	}
+	methods[req.method](req, res)
+}
+   
+export default handler
+```

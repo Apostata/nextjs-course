@@ -11,7 +11,7 @@ interface Props extends PropsWithChildren{
   }) => void,
 }
 
-const NewComment = (props: Props) => {
+const NewComment = ({onAddComment}: Props) => {
   const [isInvalid, setIsInvalid] = useState(false);
 
   const emailInputRef = useRef<HTMLInputElement>();
@@ -29,21 +29,22 @@ const NewComment = (props: Props) => {
     const isValidEmail = emailIsValid(enteredEmail)
     const isValidName = required(enteredName)
     const isValidComment = required(enteredName)
-
-    console.log(isValidEmail, isValidName, isValidComment)
     
     if (
       !isValidEmail || !isValidName || !isValidComment
     ) {
       setIsInvalid(true);
       return;
+    } else{
+      setIsInvalid(false);
     }
 
-    props.onAddComment({
+    onAddComment({
       email: enteredEmail,
       name: enteredName,
       text: enteredComment,
     });
+
     emailInputRef.current.value ='';
     nameInputRef.current.value='';
     commentInputRef.current.value='';

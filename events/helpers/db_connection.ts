@@ -17,7 +17,7 @@ export const connectDBCollection = async (colletion: string)  =>{
 		const collection = db.collection(colletion)
 		return {collection, close:()=>dbClient.close()}
 	} catch(e){
-		return new Error(`Could't could't connect to database`)
+		return new Error(`Could't connect to database`)
 	}
 
 	
