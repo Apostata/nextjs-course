@@ -1,9 +1,17 @@
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, SyntheticEvent } from 'react';
 
 import classes from './main-navigation.module.css';
+import { useSession, signOut } from 'next-auth/react';
 
 const MainNavigation: FC =()=> {
+  const {data:session, status} = useSession()
+  
+  const onLogout = (event:SyntheticEvent)=>{
+    event.preventDefault()
+    signOut()
+  }
+
   return (
     <header className={classes.header}>
       <Link href='/'>
@@ -11,15 +19,16 @@ const MainNavigation: FC =()=> {
       </Link>
       <nav>
         <ul>
-          <li>
+         {(!session && status==='unauthenticated') && <li>
             <Link href='/auth'>Login</Link>
-          </li>
-          <li>
-            <Link href='/profile'>Profile</Link>
-          </li>
-          <li>
-            <button>Logout</button>
-          </li>
+          </li>}
+          { session && <li>
+              <Link href='/profile'>Profile</Link>
+            </li>
+          }
+          {session && <li>
+            <button onClick={onLogout}>Logout</button>
+          </li>}
         </ul>
       </nav>
     </header>

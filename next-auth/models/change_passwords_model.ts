@@ -1,0 +1,1 @@
+export type ChangePass={oldPassword:string, newPassword:string}
